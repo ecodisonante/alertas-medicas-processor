@@ -18,7 +18,7 @@ public class KafkaConsumerService {
         this.processorService = processorService;
     }
 
-    @KafkaListener(topics = "${kafka.topics.signs}", groupId = "${kafka.topics.signs}")
+    @KafkaListener(topics = "${kafka.topics.signs}", groupId = "${kafka.group.id.config}")
     public void consume(String message) {
         // TODO: quitar
         System.out.println("Consumed message: " + message);

@@ -20,10 +20,7 @@ public class KafkaConsumerService {
 
     @KafkaListener(topics = "${kafka.topics.signs}", groupId = "${kafka.group.id.config}")
     public void consume(String message) {
-        // TODO: quitar
-        System.out.println("Consumed message: " + message);
-
-        //TODO: verificar alerta
+        log.info("💛 Señales vitales recibidas");
         processorService.generarAlerta(message);
     }
 }

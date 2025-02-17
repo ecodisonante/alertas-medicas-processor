@@ -11,6 +11,9 @@ import com.alertasmedicas.app.kafka_processor.dto.MeasurementDTO;
 import com.alertasmedicas.app.kafka_processor.dto.VitalSignDTO;
 import com.alertasmedicas.app.kafka_processor.util.MessageParser;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Service
 public class ProcessorService {
 
@@ -26,11 +29,23 @@ public class ProcessorService {
     }
 
     public void generarAlerta(String signos) {
-        var fakerList = MessageParser.jsonToMeasurementDto(signos);
-        var anomaliesList = generateAnomaliesList(fakerList);
+        try {
 
-        for (MeasurementDTO anomaly : anomaliesList) {
-            producerService.sendMessage(anomaly.toString());
+            var fakerList = MessageParser.jsonToMeasurementDto(signos);
+            var anomaliesList = generateAnomaliesList(fakerList);
+
+            if (anomaliesList.size() > 0) {
+                log.info("🚨 Se detectaron {} mediciones críticas", anomaliesList.size());
+                
+                for (MeasurementDTO anomaly : anomaliesList) {
+                    producerService.sendMessage(anomaly.toString());
+                }
+            } else {
+                log.info("💚 No se detectaron mediciones críticas");
+            }
+
+        } catch (Exception e) {
+            log.error("❌ Error al procesar las señales vitales: " + e.getMessage());
         }
     }
 

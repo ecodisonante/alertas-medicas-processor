@@ -26,12 +26,12 @@ public class ProcessorService {
     }
 
     public void generarAlerta(String signos) {
-        producerService.sendMessage("Llegó un mensaje");
-
         var fakerList = MessageParser.jsonToMeasurementDto(signos);
         var anomaliesList = generateAnomaliesList(fakerList);
 
-        producerService.sendMessage(anomaliesList.toString());
+        for (MeasurementDTO anomaly : anomaliesList) {
+            producerService.sendMessage(anomaly.toString());
+        }
     }
 
     private List<MeasurementDTO> generateAnomaliesList(List<FakerDTO> fakerList) {

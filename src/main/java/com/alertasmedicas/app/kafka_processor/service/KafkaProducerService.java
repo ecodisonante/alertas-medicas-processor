@@ -10,8 +10,8 @@ public class KafkaProducerService {
 
     private KafkaTemplate<String, String> kafkaTemplate;
 
-    @Value("${kafka.topics.alert:}")
-    private static String alertTopic;
+    @Value("${kafka.topics.alert}")
+    private String alertTopic;
 
     @Autowired
     public KafkaProducerService(KafkaTemplate<String, String> kafkaTemplate) {
